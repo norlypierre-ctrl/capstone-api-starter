@@ -58,9 +58,9 @@ public class MYSqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
     @Override
     public void addItemToCart(int userId, int productID) {
         String addItemQuery = """
-            INSERT INTO shopping_cart (user_id, product_id, quantity)
-            VALUES (?, ?, 1) ON DUPLICATE KEY UPDATE quantity = quantity + 1
-            """;
+                INSERT INTO shopping_cart (user_id, product_id, quantity)
+                VALUES (?, ?, 1) ON DUPLICATE KEY UPDATE quantity = quantity + 1
+                """;
 
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(addItemQuery)) {
@@ -77,8 +77,36 @@ public class MYSqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
 
     @Override
     public void updateQuantity(int userId, int productId, int quantity) {
+        String updateQuery = """
+                UPDATE shopping_cart SET quantity = ? WHERE user_id = ?
+                AND product_id = ? AND quantity >= 1""";
 
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(updateQuery)) {
+
+                statement.setInt(1, quantity);
+                statement.setInt(2, userId);
+                statement.setInt(3, productId);
+
+                statement.executeUpdate();
+
+                if (quantity <= 0) {
+                    String deleteQuery = """
+                            DELETE FROM shopping_cart WHERE user_id = ?
+                            AND product_id = ?""";
+
+                    try (PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery)) {
+
+                        deleteStatement.setInt(1, userId);
+                        deleteStatement.setInt(2, productId);
+
+                        deleteStatement.executeUpdate();
+                    }
+                }
+        } catch(SQLException e) {
+            throw new RuntimeException(e);
     }
+}
 
     @Override
     public void clearCart(int userId) {
