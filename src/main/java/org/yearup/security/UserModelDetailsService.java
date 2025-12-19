@@ -14,9 +14,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Authenticate a user from the database.
- */
 @Component("userDetailsService")
 public class UserModelDetailsService implements UserDetailsService {
 

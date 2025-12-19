@@ -111,7 +111,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
     {
         // delete category
         String deleteQuery =
-                "DELETE Categories WHERE category_id = ?";
+                "DELETE FROM Categories WHERE category_id = ?";
 
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(deleteQuery)) {
