@@ -13,7 +13,7 @@ import org.yearup.models.Product;
 import java.util.List;
 
 @RestController
-@RequestMapping("categories")
+@RequestMapping("/categories")
 @CrossOrigin
 public class CategoriesController
 {

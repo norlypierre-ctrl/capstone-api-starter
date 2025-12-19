@@ -15,7 +15,7 @@ import org.yearup.models.User;
 import java.security.Principal;
 
 @RestController
-@RequestMapping ("cart")
+@RequestMapping ("/cart")
 @CrossOrigin
 @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 public class ShoppingCartController
